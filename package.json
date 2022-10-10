@@ -1,9 +1,10 @@
 {
-	"name": "n8n-nodes-newreleases",
+	"name": "@oneacrefund/n8n-nodes-newreleases",
 	"version": "0.1.0",
 	"description": "This is an n8n community node for the new(releases) service API",
 	"keywords": [
-		"n8n-community-node-package"
+		"n8n-community-node-package",
+		"newreleases"
 	],
 	"license": "MIT",
 	"homepage": "",
