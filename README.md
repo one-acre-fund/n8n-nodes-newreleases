@@ -2,6 +2,8 @@
 
 ![logo](./docs/logo.svg)
 
+[![npm version](https://badge.fury.io/js/@oneacrefund%2Fn8n-nodes-newreleases.svg)](https://badge.fury.io/js/@oneacrefund%2Fn8n-nodes-newreleases)
+
 This is an n8n community node to interact with the [New(releases)](https://newreleases.io/) service, which scans rpositories from various providers (Github, Docker hub, npm...) to detect newly released versions and send notifications.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
