@@ -616,21 +616,25 @@ export class NewReleases implements INodeType {
 				for (let i = 0; i < items.length; i++) {
 					const provider = this.getNodeParameter('provider', i, null) as string;
 					const name = this.getNodeParameter('name', i, null) as string;
+					// tslint:disable-next-line: variable-name
 					const email_notification = this.getNodeParameter('email_notification', i, null) as string;
+					// tslint:disable-next-line: variable-name
 					const exclude_prereleases = this.getNodeParameter(
 						'exclude_prereleases',
 						i,
 						false,
 					) as boolean;
+					// tslint:disable-next-line: variable-name
 					const exclude_updated = this.getNodeParameter('exclude_updated', i, false) as boolean;
 					const note = this.getNodeParameter('note', i, null) as string;
 
 					// const createOptions = this.getNodeParameter('createOptions', i, null) as IDataObject;
-					const exclude_version_regexp = this.getNodeParameter(
-						'exclude_version_regexp',
-						i,
-						null,
-					) as IDataObject;
+
+					// tslint:disable-next-line: variable-name
+					const exclude_version_regexp = // tslint:disable-next-line: no-any
+					(this.getNodeParameter('exclude_version_regexp', i, { exclusion: [] }) as any)[
+						'exclusion'
+					];
 
 					const body = {
 						name,
@@ -639,11 +643,7 @@ export class NewReleases implements INodeType {
 						exclude_prereleases,
 						exclude_updated,
 						note,
-
-						...(exclude_version_regexp &&
-							(exclude_version_regexp as any).exclusion && {
-								exclude_version_regexp: (exclude_version_regexp as any).exclusion,
-							}),
+						exclude_version_regexp,
 					};
 
 					console.dir(exclude_version_regexp);
