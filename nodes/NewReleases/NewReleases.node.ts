@@ -7,6 +7,8 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
+import * as _ from 'lodash';
+
 import { newReleasesApiRequest } from './GenericFunctions';
 
 import { createOptions } from './CreateOptions';
@@ -154,6 +156,23 @@ export class NewReleases implements INodeType {
 					},
 				},
 			},
+
+			{
+				displayName: 'Get Latest Release?',
+				name: 'getLatestRelease',
+				type: 'boolean',
+				default: false,
+				required: true,
+				description:
+					'Whether to fetch the most recent non-excluded release for this project? WARNING, this can cause the request to be quite slow',
+				displayOptions: {
+					show: {
+						resource: ['project'],
+						operation: ['get'],
+					},
+				},
+			},
+
 			{
 				displayName: 'Search String',
 				name: 'search',
@@ -285,6 +304,21 @@ export class NewReleases implements INodeType {
 					responseData = await newReleasesApiRequest.call(this, {
 						url: `/v1/projects/${slug}`,
 					});
+
+					if (responseData && this.getNodeParameter('getLatestRelease', i, false)) {
+						const projectReleases = await newReleasesApiRequest.call(this, {
+							url: `/v1/projects/${slug}/releases`,
+							scroll: 'releases',
+							scrollUntil: (release: any) => !release.is_excluded,
+							maxPages: 50,
+						});
+
+						if (projectReleases) {
+							responseData.latest_release = _.last(
+								_.sortBy(_.reject(projectReleases, 'is_excluded'), 'date'),
+							);
+						}
+					}
 
 					returnData = returnData.concat(responseData);
 				}

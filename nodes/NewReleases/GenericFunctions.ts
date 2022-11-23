@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { IExecuteFunctions, ILoadOptionsFunctions } from 'n8n-core';
 
 import { IDataObject, IHookFunctions, IHttpRequestOptions, IWebhookFunctions } from 'n8n-workflow';
@@ -37,11 +39,14 @@ export async function newReleasesApiRequest(
 			if (batch && batch[scrollValue] && batch[scrollValue].length) {
 				response = response.concat(batch[scrollValue]);
 			}
+			// console.log('tick');
+
 			fetchMore =
 				batch &&
 				batch.total_pages &&
 				batch.total_pages > page &&
-				(!option.maxPages || page < option.maxPages);
+				(!option.maxPages || page < option.maxPages) &&
+				(!option.scrollUntil || !_.some(batch[scrollValue], option.scrollUntil as Function));
 			page++;
 		}
 		return response;
