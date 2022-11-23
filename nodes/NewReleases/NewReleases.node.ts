@@ -361,9 +361,6 @@ export class NewReleases implements INodeType {
 						exclude_version_regexp,
 					};
 
-					console.dir(exclude_version_regexp);
-					console.dir(body);
-
 					responseData = await newReleasesApiRequest.call(this, {
 						method: 'POST',
 						url: `/v1/projects`,

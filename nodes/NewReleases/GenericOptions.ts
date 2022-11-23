@@ -1,6 +1,6 @@
 import { INodeProperties, INodePropertyOptions } from 'n8n-workflow';
 
-export const providersList: INodePropertyOptions[] = [
+const providersList: INodePropertyOptions[] = [
 	{
 		value: 'nuget',
 		name: '.NET NuGet',
@@ -121,11 +121,11 @@ export const genericOptions: INodeProperties[] = [
 			},
 		},
 		options: [
-			...providersList,
 			{
 				name: 'Any',
 				value: '',
 			},
+			...providersList,
 		],
 	},
 ];

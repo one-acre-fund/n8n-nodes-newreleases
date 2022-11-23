@@ -1,6 +1,6 @@
 {
 	"name": "@oneacrefund/n8n-nodes-newreleases",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"description": "This is an n8n community node for the new(releases) service API",
 	"keywords": [
 		"n8n-community-node-package",
