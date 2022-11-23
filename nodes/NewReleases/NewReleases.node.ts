@@ -309,6 +309,7 @@ export class NewReleases implements INodeType {
 						const projectReleases = await newReleasesApiRequest.call(this, {
 							url: `/v1/projects/${slug}/releases`,
 							scroll: 'releases',
+							// tslint:disable-next-line: no-any
 							scrollUntil: (release: any) => !release.is_excluded,
 							maxPages: 50,
 						});
