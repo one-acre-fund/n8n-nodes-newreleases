@@ -81,6 +81,11 @@ export class NewReleases implements INodeType {
 						action: 'Get project release a release',
 					},
 					{
+						name: 'Get Latest Project Release',
+						value: 'getLatest',
+						action: 'Get the most recent non excluded release for a project',
+					},
+					{
 						name: 'Get Project Release Notes',
 						value: 'notes',
 						action: 'Get project release notes a release',
@@ -153,22 +158,6 @@ export class NewReleases implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['release'],
-					},
-				},
-			},
-
-			{
-				displayName: 'Get Latest Release?',
-				name: 'getLatestRelease',
-				type: 'boolean',
-				default: false,
-				required: true,
-				description:
-					'Whether to fetch the most recent non-excluded release for this project? WARNING, this can cause the request to be quite slow',
-				displayOptions: {
-					show: {
-						resource: ['project'],
-						operation: ['get'],
 					},
 				},
 			},
@@ -305,22 +294,6 @@ export class NewReleases implements INodeType {
 						url: `/v1/projects/${slug}`,
 					});
 
-					if (responseData && this.getNodeParameter('getLatestRelease', i, false)) {
-						const projectReleases = await newReleasesApiRequest.call(this, {
-							url: `/v1/projects/${slug}/releases`,
-							scroll: 'releases',
-							// tslint:disable-next-line: no-any
-							scrollUntil: (release: any) => !release.is_excluded,
-							maxPages: 50,
-						});
-
-						if (projectReleases) {
-							responseData.latest_release = _.last(
-								_.sortBy(_.reject(projectReleases, 'is_excluded'), 'date'),
-							);
-						}
-					}
-
 					returnData = returnData.concat(responseData);
 				}
 			}
@@ -420,6 +393,21 @@ export class NewReleases implements INodeType {
 						url: `/v1/projects/${slug}/releases`,
 						scroll: 'releases',
 						maxPages,
+					});
+
+					returnData = returnData.concat(responseData);
+				}
+			}
+
+			if (operation === 'getLatest') {
+				// ----------------------------------
+				//          Project::getLatest
+				// ----------------------------------
+				for (let i = 0; i < items.length; i++) {
+					const slug = this.getNodeParameter('slug', i, null) as string;
+
+					responseData = await newReleasesApiRequest.call(this, {
+						url: `/v1/projects/${slug}/latest-release`,
 					});
 
 					returnData = returnData.concat(responseData);
